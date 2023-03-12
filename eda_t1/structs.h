@@ -13,9 +13,9 @@ typedef struct registo
 	struct registo* seguinte_m;
 } meio;
 void listarmeio(meio* inicio);
-int prox_cod(meio* inicio, int cod);
+int prox_cod(meio* inicio, int* cod);
 meio* inserirmeio(meio* inicio, int cod, char tipo[], float custo, float bateria);
-
+meio* removermeio(meio* inicio, int cod);
 typedef struct registo2 {
 	int nif;
 	char palavra_passe[50];
@@ -29,7 +29,7 @@ cliente* inserircliente(cliente* inicio,int nif,char palavra_passe[],char nome[]
 void listarclientes(cliente* inicio);
 int existecliente(cliente* inicio, int nif);
 int c_confirmaconta(cliente* inicio, int nif,char palavra_passe[]);
-
+cliente* removercliente(cliente* inicio, int nif);
 
 void deposito(cliente* inicio, int nif, float n);
 typedef struct registo3

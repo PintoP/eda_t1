@@ -11,6 +11,7 @@ int main()
     cliente* clientes = NULL;
     meio* meios = NULL;
     meios = inserirmeio(meios,1, "mota", 1, 1);
+    meios = inserirmeio(meios,2, "motaaa", 1, 1);
     char nome_c[50], pass_c[50], morada_c[50];
     int nif_c = 0;
     float dep_c = 0;
@@ -121,7 +122,7 @@ int main()
                                 scanf_s("%f",&custo);
                                 printf("Custo:");
                                 scanf_s("%f", &auton);
-                                meios = inserirmeio(meios,cod,tipo,custo,auton);
+                                meios = inserirmeio(meios, cod, tipo, custo, auton);
 
                                 break;
                             default:
@@ -129,17 +130,26 @@ int main()
                         }
                     break;
                 case 4://alterar dados********************************
+
                     break;
                 case 5://remover dados*********************************
                     menu_esc(&opc2);
                     switch (opc2)
                     {
                         case 1:
-
+                            printf("Insira o nif : ");
+                            scanf_s("%d", &nif_c);
+                            clientes = removercliente(clientes,nif_c);
                             break;
                         case 2:
+                            printf("Insira o nif : ");
+                            scanf_s("%d", &nif_c);
+                            gestores = removergestor(gestores, nif_c);
                             break;
                         case 3:
+                            printf("Insira o cod:");
+                            scanf_s("%d", &cod);
+                            removermeio(meios, cod);
                             break;
                         default:
                             break;

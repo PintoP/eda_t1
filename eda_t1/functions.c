@@ -120,6 +120,35 @@ void deposito(cliente* inicio,int niff, float d)
     }
     return(0);
 }
+
+cliente* removercliente(cliente* inicio, int niff)
+{
+    cliente* anterior = inicio, * atual = inicio, * aux;
+
+    if (atual == NULL) return(NULL);
+    else if (atual->nif == niff) // remoção do 1º registo
+    {
+        aux = atual->seguinte;
+        free(atual);
+        return(aux);
+    }
+    else
+    {
+        while ((atual != NULL) && (atual->nif != niff))
+        {
+            anterior = atual;
+            atual = atual->seguinte;
+        }
+        if (atual == NULL) return(inicio);
+        else
+        {
+            anterior->seguinte = atual->seguinte;
+            free(atual);
+            return(inicio);
+        }
+    }
+}
+
 /*fim funçoes cliente*/
 
 /*funções gestor*/
@@ -162,9 +191,9 @@ gestor* inserirgestor(gestor* inicio, int niff, char palavra_pass[], char nomee[
     else
     {
         printf("Gestor já existe");
-        return inicio; /*change*/
+        return inicio;
     }
-    return inicio; /*change*/
+    return inicio; 
 }
 
 void listargestor(gestor* inicio)
@@ -176,6 +205,34 @@ void listargestor(gestor* inicio)
     }
 }
 
+gestor* removergestor(gestor* inicio, int niff)
+{
+    gestor* anterior = inicio, * atual = inicio, * aux;
+
+    if (atual == NULL) return(NULL);
+    else if (atual->nif_g == niff)
+    {
+        aux = atual->seguinte_g;
+        free(atual);
+        return(aux);
+    }
+    else
+    {
+        while ((atual != NULL) && (atual->nif_g != niff))
+        {
+            anterior = atual;
+            atual = atual->seguinte_g;
+        }
+        if (atual == NULL) return(inicio);
+        else
+        {
+            anterior->seguinte_g = atual->seguinte_g;
+            free(atual);
+            return(inicio);
+        }
+    }
+}
+
 /*fim funções gestor*/
 /*funções meios*/
 
@@ -183,10 +240,10 @@ void listarmeio(meio* inicio)
 {
     while (inicio != NULL)
     {
-        printf("%d %s %.2f %.2f %s\n",inicio->codigo, inicio->tipo, inicio->custo, inicio->bateria, inicio->loc);
+        printf("%d %s %.2f %.2f %s ",inicio->codigo, inicio->tipo, inicio->custo, inicio->bateria, inicio->loc);
         if (inicio->estado == 0)
         {
-            printf("disponivel");
+            printf("disponivel\n");
         }
         else {
             printf("ocupado");
@@ -195,35 +252,68 @@ void listarmeio(meio* inicio)
     }
 }
 
-int prox_cod(meio* inicio, int codd)
+int prox_cod(meio* inicio, int* codd)
 {
     while (inicio != NULL)
     {
-        codd = inicio->codigo;//fazer if para ver o maior cod
+        printf("codd: %d, codigo: %d\n", *codd, inicio->codigo);
+        if ((inicio->codigo) > *codd)
+        {
+            *codd = inicio->codigo;
+        }
         inicio = inicio->seguinte_m;
     }
+    *codd += 1;
     return(0);
 }
 
-meio* inserirmeio(meio* inicio,int codd, char tipoo[], float custoo, float bateriaa)
+meio* inserirmeio(meio* inicio, int codd, char tipoo[], float custoo, float bateriaa)
 {
-    
-    prox_cod(inicio, codd);
-        meio* novo = malloc(sizeof(struct registo));
-        if (novo != NULL)
+    prox_cod(inicio, &codd);
+
+    meio* novo = malloc(sizeof(struct registo));
+    if (novo != NULL)
+    {
+        novo->codigo = codd;
+        strcpy(novo->tipo, tipoo);
+        novo->custo = custoo;
+        novo->bateria = bateriaa;
+        strcpy(novo->loc, "indisponivel");
+        novo->seguinte_m = inicio;
+        novo->estado = 0;
+        printf("sucesso");
+        return(novo);
+    }
+
+    return inicio;
+}
+
+meio* removermeio(meio* inicio, int cod)
+{
+    meio* anterior = inicio, * atual = inicio, * aux;
+
+    if (atual == NULL) return(NULL);
+    else if (atual->codigo == cod) // remoção do 1º registo
+    {
+        aux = atual->seguinte_m;
+        free(atual);
+        return(aux);
+    }
+    else
+    {
+        while ((atual != NULL) && (atual->codigo != cod))
         {
-            novo->codigo = codd + 1;
-            strcpy(novo->tipo, tipoo);
-            novo->custo = custoo;
-            novo->bateria = bateriaa;
-            strcpy(novo->loc, "indisponivel");
-            novo->seguinte_m = inicio;
-            novo->estado=0;
-            printf("sucesso");
-            return(novo);
+            anterior = atual;
+            atual = atual->seguinte_m;
         }
-    
-    return inicio; /*change*/
+        if (atual == NULL) return(inicio);
+        else
+        {
+            anterior->seguinte_m = atual->seguinte_m;
+            free(atual);
+            return(inicio);
+        }
+    }
 }
 
 /*fim funções meios*/
