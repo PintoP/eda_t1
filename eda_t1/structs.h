@@ -6,11 +6,11 @@ typedef struct registo
 	int codigo;
 	char tipo[50];
 	float bateria;
-	float autonomia;
 	float custo;
 	char loc[50];
 	struct registo* seguinte_m;
 } meio;
+void listarmeio(meio* inicio);
 
 typedef struct registo2 {
 	int nif;
@@ -26,6 +26,8 @@ void listarclientes(cliente* inicio);
 int existecliente(cliente* inicio, int nif);
 int c_confirmaconta(cliente* inicio, int nif,char palavra_passe[]);
 
+
+void deposito(cliente* inicio, int nif, float n);
 typedef struct registo3
 {
 	int nif_g;
@@ -33,7 +35,10 @@ typedef struct registo3
 	char palavra_passe_g[50];
 	struct registo3* seguinte_g;
 }gestor;
-gestor* inserirgestor(gestor* inicio,int nif_g,char palavra_passe_g[]);
+gestor* inserirgestor(gestor* inicio,int nif_g,char palavra_passe_g[],char nome[]);
+int existegestor(cliente* inicio, int nif);
+void listargestor(gestor* inicio);
+
 typedef struct registo4
 {
 	int cod_a;

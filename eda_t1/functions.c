@@ -35,6 +35,15 @@ void menu_cliente(int* op)
     scanf_s("%d", op);
 }
 
+void menu_esc(int* op)
+{
+    printf("1)Clientes");
+    printf("2)Gestor");
+    printf("3)Meios");
+    printf("0)Sair");
+    scanf_s("%d",op);
+}
+
 /*funçoes cliente*/
 
 int existecliente(cliente* inicio, int niff)
@@ -78,9 +87,9 @@ cliente* inserircliente(cliente* inicio, int niff, char palavra_pass[], char nom
     else
     {
         printf("Cliente já existe");
-        return inicio; /*change*/
+        return inicio;
     }
-    return inicio; /*change*/
+    return inicio;
 }
 
 void listarclientes(cliente* inicio)
@@ -97,6 +106,20 @@ void alugar(aluguer* algueres,int nif_a,char hora_a[],char veiculo_a[])
 {
     printf("adoado");
 }
+
+void deposito(cliente* inicio,int niff, float d)
+{
+    while (inicio != NULL)
+    {
+        if (inicio->nif == niff)
+        {
+            inicio->saldo += d;
+            return(1);
+        }
+        inicio = inicio->seguinte;
+    }
+    return(0);
+}
 /*fim funçoes cliente*/
 
 /*funções gestor*/
@@ -111,5 +134,58 @@ int g_confirmaconta(gestor* inicio, int niff, char pass[])
     return(0);
 }
 
+int existegestor(gestor* inicio, int niff)
+{
+    while (inicio != NULL)
+    {
+        if (inicio->nif_g == niff) return(1);
+        inicio = inicio->seguinte_g;
+    }
+    return(0);
+}
+
+gestor* inserirgestor(gestor* inicio, int niff, char palavra_pass[], char nomee[])
+{
+    if (!existegestor(inicio, niff))
+    {
+        gestor* novo = malloc(sizeof(struct registo3));
+        if (novo != NULL)
+        {
+            novo->nif_g = niff;
+            strcpy(novo->palavra_passe_g, palavra_pass);
+            strcpy(novo->nome_g, nomee);
+            novo->seguinte_g = inicio;
+            printf("sucesso");
+            return(novo);
+        }
+    }
+    else
+    {
+        printf("Gestor já existe");
+        return inicio; /*change*/
+    }
+    return inicio; /*change*/
+}
+
+void listargestor(gestor* inicio)
+{
+    while (inicio != NULL)
+    {
+        printf("%d %s %s\n", inicio->nif_g, inicio->nome_g, inicio->palavra_passe_g);
+        inicio = inicio->seguinte_g;
+    }
+}
 
 /*fim funções gestor*/
+/*funções meios*/
+
+void listarmeio(meio* inicio)
+{
+    while (inicio != NULL)
+    {
+        printf("%s %f %f %s\n", inicio->tipo, inicio->custo, inicio->bateria, inicio->loc);
+        inicio = inicio->seguinte_m;
+    }
+}
+
+/*fim funções meios*/
