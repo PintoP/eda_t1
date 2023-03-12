@@ -183,9 +183,47 @@ void listarmeio(meio* inicio)
 {
     while (inicio != NULL)
     {
-        printf("%s %f %f %s\n", inicio->tipo, inicio->custo, inicio->bateria, inicio->loc);
+        printf("%d %s %.2f %.2f %s\n",inicio->codigo, inicio->tipo, inicio->custo, inicio->bateria, inicio->loc);
+        if (inicio->estado == 0)
+        {
+            printf("disponivel");
+        }
+        else {
+            printf("ocupado");
+        }
         inicio = inicio->seguinte_m;
     }
+}
+
+int prox_cod(meio* inicio, int codd)
+{
+    while (inicio != NULL)
+    {
+        codd = inicio->codigo;//fazer if para ver o maior cod
+        inicio = inicio->seguinte_m;
+    }
+    return(0);
+}
+
+meio* inserirmeio(meio* inicio,int codd, char tipoo[], float custoo, float bateriaa)
+{
+    
+    prox_cod(inicio, codd);
+        meio* novo = malloc(sizeof(struct registo));
+        if (novo != NULL)
+        {
+            novo->codigo = codd + 1;
+            strcpy(novo->tipo, tipoo);
+            novo->custo = custoo;
+            novo->bateria = bateriaa;
+            strcpy(novo->loc, "indisponivel");
+            novo->seguinte_m = inicio;
+            novo->estado=0;
+            printf("sucesso");
+            return(novo);
+        }
+    
+    return inicio; /*change*/
 }
 
 /*fim funções meios*/

@@ -10,9 +10,15 @@ int main()
     gestores = inserirgestor(gestores, 1, "1", "1");
     cliente* clientes = NULL;
     meio* meios = NULL;
+    meios = inserirmeio(meios,1, "mota", 1, 1);
     char nome_c[50], pass_c[50], morada_c[50];
     int nif_c = 0;
     float dep_c = 0;
+
+    char tipo[50];
+    float custo = 0, auton = 0;
+    int cod=0;
+
     int op1=0,opc=0,opc2=0;
 
     do
@@ -109,6 +115,14 @@ int main()
                                 
                                 break;
                             case 3:
+                                printf("Tipo de meio:");
+                                scanf_s("%49s", tipo, 50);
+                                printf("Autonomia:");
+                                scanf_s("%f",&custo);
+                                printf("Custo:");
+                                scanf_s("%f", &auton);
+                                meios = inserirmeio(meios,cod,tipo,custo,auton);
+
                                 break;
                             default:
                                 break;

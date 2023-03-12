@@ -8,9 +8,13 @@ typedef struct registo
 	float bateria;
 	float custo;
 	char loc[50];
+	int estado;//1-opcupado      0-disponivel
+
 	struct registo* seguinte_m;
 } meio;
 void listarmeio(meio* inicio);
+int prox_cod(meio* inicio, int cod);
+meio* inserirmeio(meio* inicio, int cod, char tipo[], float custo, float bateria);
 
 typedef struct registo2 {
 	int nif;
