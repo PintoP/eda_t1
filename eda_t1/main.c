@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <Windows.h>
 #include "structs.h"
 
 int main()
@@ -13,14 +14,14 @@ int main()
     meios = inserirmeio(meios,1, "mota", 1, 1);
     meios = inserirmeio(meios,2, "motaaa", 1, 1);
     char nome_c[50], pass_c[50], morada_c[50];
-    int nif_c = 0;
+    int nif_c = 0,veiculo_esc=0;
     float dep_c = 0;
-
+    int c_logada;
     char tipo[50];
     float custo = 0, auton = 0;
     int cod=0;
 
-    int op1=0,opc=0,opc2=0;
+    int op1=0,opc=0,opc2=0,opc3=0;
 
     do
     {
@@ -31,10 +32,10 @@ int main()
         case 1:
             printf("Insira o NIF: ");
             scanf_s("%d", &nif_c);
-
+            c_logada=nif_c;
             printf("Insira uma senha: ");
             scanf_s("%49s", pass_c, 50);
-
+            system("cls");
             
             if (c_confirmaconta(clientes, nif_c, pass_c))
             {
@@ -42,7 +43,7 @@ int main()
                 switch (opc)
                 {
                 case 1://aluguer
-                    
+                    scanf_s("%d", &veiculo_esc);
                     break;
                 case 2://adicionar dinheiro na conta
                     scanf_s("%f",&dep_c);
@@ -58,16 +59,19 @@ int main()
             }
             else if (g_confirmaconta(gestores, nif_c, pass_c))
             {
-                menu_gestor(&opc);
-                switch (opc)
+                do
                 {
-                case 1://armazenar dados************************************
-                    menu_esc(&opc2);
-                    break;
-                case 2://mostrar dados**************************************
-                    menu_esc(&opc2);
-                    switch (opc2)
+                    menu_gestor(&opc);
+                    switch (opc)
                     {
+                    case 1://armazenar dados************************************
+                        menu_esc(&opc2);
+                        armazena(clientes, gestores);
+                        break;
+                    case 2://mostrar dados**************************************
+                        menu_esc(&opc2);
+                        switch (opc2)
+                        {
                         case 1:
                             listarclientes(clientes);
                             break;
@@ -77,69 +81,105 @@ int main()
                         case 3:
                             listarmeio(meios);
                             break;
+                        case 4:
+                            break;
                         default:
                             break;
-                    }
-                    break;
+                        }
+                        break;
 
-                    break;
-                case 3://inserir dados**************************************
-                    menu_esc(&opc2);
+                        break;
+                    case 3://inserir dados**************************************
+                        menu_esc(&opc2);
+                        system("cls");
                         switch (opc2)
                         {
-                            case 1:
-                                printf("Insira um nome: ");
-                                scanf_s("%49s", nome_c, 50);
+                        case 1:
+                            printf("Insira um nome: ");
+                            scanf_s("%49s", nome_c, 50);
 
-                                printf("Insira uma senha: ");
-                                scanf_s("%49s", pass_c, 50);
+                            printf("Insira uma senha: ");
+                            scanf_s("%49s", pass_c, 50);
 
-                                printf("Insira a morada:");
-                                scanf_s("%49s", morada_c, 50);
+                            printf("Insira a morada:");
+                            scanf_s("%49s", morada_c, 50);
 
-                                printf("nif:");
-                                scanf_s("%d", &nif_c);
+                            printf("nif:");
+                            scanf_s("%d", &nif_c);
 
-                                clientes = inserircliente(clientes, nif_c, pass_c, nome_c, morada_c, 0);
-                                break;
-                            case 2:
-                                printf("Insira um nome: ");
-                                scanf_s("%49s", nome_c, 50);
+                            clientes = inserircliente(clientes, nif_c, pass_c, nome_c, morada_c, 0);
+                            break;
+                        case 2:
+                            printf("Insira um nome: ");
+                            scanf_s("%49s", nome_c, 50);
 
-                                printf("Insira uma senha: ");
-                                scanf_s("%49s", pass_c, 50);
+                            printf("Insira uma senha: ");
+                            scanf_s("%49s", pass_c, 50);
 
-                                printf("nif:");
-                                scanf_s("%d", &nif_c);
+                            printf("nif:");
+                            scanf_s("%d", &nif_c);
 
-                                gestores = inserirgestor(gestores, nif_c, pass_c, nome_c);
-                                
-                                break;
-                            case 3:
-                                printf("Tipo de meio:");
-                                scanf_s("%49s", tipo, 50);
-                                printf("Autonomia:");
-                                scanf_s("%f",&custo);
-                                printf("Custo:");
-                                scanf_s("%f", &auton);
-                                meios = inserirmeio(meios, cod, tipo, custo, auton);
+                            gestores = inserirgestor(gestores, nif_c, pass_c, nome_c);
 
-                                break;
-                            default:
-                                break;
+                            break;
+                        case 3:
+                            printf("Tipo de meio:");
+                            scanf_s("%49s", tipo, 50);
+                            printf("Autonomia:");
+                            scanf_s("%f", &custo);
+                            printf("Custo:");
+                            scanf_s("%f", &auton);
+                            meios = inserirmeio(meios, cod, tipo, custo, auton);
+
+                            break;
+                        default:
+                            break;
                         }
-                    break;
-                case 4://alterar dados********************************
+                        break;
+                    case 4://alterar dados********************************
+                        switch (opc2)
+                        {
+                            menu_esc(&opc2);
+                        case 1:
 
-                    break;
-                case 5://remover dados*********************************
-                    menu_esc(&opc2);
-                    switch (opc2)
-                    {
+
+                            printf("Nif anterior:");
+                            printf("Insira o novo nif:");
+                            scanf_s("%d", &nif_c);
+
+                            printf("Nome anterior:");
+                            printf("Insira o novo nome:");
+                            scanf_s("%49s", nome_c, 50);
+
+                            printf("Palavra-passe anterior:");
+                            printf("Insira o novo nome:");
+                            scanf_s("%49s", pass_c, 50);
+
+                            printf("Morada anterior:");
+                            printf("Insira a nova morada:");
+                            scanf_s("%49s", pass_c, 50);
+
+                            /*função para remover*/
+                            /*função para add*/
+                            break;
+                        case 2:
+
+
+                            break;
+                        case 3:
+
+
+                            break;
+                        }
+                        break;
+                    case 5://remover dados*********************************
+                        menu_esc(&opc2);
+                        switch (opc2)
+                        {
                         case 1:
                             printf("Insira o nif : ");
                             scanf_s("%d", &nif_c);
-                            clientes = removercliente(clientes,nif_c);
+                            clientes = removercliente(clientes, nif_c);
                             break;
                         case 2:
                             printf("Insira o nif : ");
@@ -153,11 +193,12 @@ int main()
                             break;
                         default:
                             break;
+                        }
+                        break;
+                    default://**************************************************
+                        break;
                     }
-                    break;
-                default://**************************************************
-                    break;
-                }
+                }while (opc != 0);
             }
             else
             {
@@ -167,6 +208,7 @@ int main()
             break;
 
         case 2:
+            printf("--Registo--\n");
             printf("Insira um nome: ");
             scanf_s("%49s", nome_c, 50);
 
@@ -178,7 +220,7 @@ int main()
 
             printf("nif:");
             scanf_s("%d", &nif_c);
-
+            estetica("Registado com sucesso");
             clientes = inserircliente(clientes, nif_c, pass_c, nome_c, morada_c, 0);
             break;
 

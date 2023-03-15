@@ -27,4 +27,8 @@
       <Filter>Arquivos de Origem</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="contas.txt" />
+    <Text Include="meios.txt" />
+  </ItemGroup>
 </Project>

@@ -40,15 +40,21 @@ typedef struct registo3
 	struct registo3* seguinte_g;
 }gestor;
 gestor* inserirgestor(gestor* inicio,int nif_g,char palavra_passe_g[],char nome[]);
-int existegestor(cliente* inicio, int nif);
+int existegestor(gestor* inicio, int nif);
 void listargestor(gestor* inicio);
 
 typedef struct registo4
 {
 	int cod_a;
-	int nif;
+	int nif_a;
+	int veiculo_cod;
 	char hora[10];
-	char veiculo[50];
+	char data[10];
 	struct registo4* seguinte_a;
 }aluguer;
 
+
+
+/*funções a parte*/
+void estetica(char frase[]);
+void armazena(cliente* inicio,gestor* inicio2);

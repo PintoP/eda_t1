@@ -1,0 +1,2 @@
+Nif:13091816;Nome:a;Saldo:0.00;Morada:adoado;0
+Nif:1;Nome:1;1

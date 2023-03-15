@@ -5,12 +5,27 @@
 #include <time.h>
 #include "structs.h"
 
+void estetica(char frase[])
+{
+    system("cls");
+    printf("%s", frase);
+    for (int z=0;z<3;z++)
+    {
+        Sleep(450);
+        printf(".");
+    }
+    Sleep(600);
+    system("cls");
+}
+
 void menu_inicial(int* op)
 {
+    printf("--MENU--\n");
     printf("1)Login\n");
     printf("2)Registar\n");
     printf("0)Sair\n");
     scanf_s("%d", op);
+    system("cls");
 }
 
 void menu_gestor(int* op)
@@ -37,10 +52,11 @@ void menu_cliente(int* op)
 
 void menu_esc(int* op)
 {
-    printf("1)Clientes");
-    printf("2)Gestor");
-    printf("3)Meios");
-    printf("0)Sair");
+    printf("--Insira uma opcao--\n");
+    printf("1)Clientes\n");
+    printf("2)Gestor\n");
+    printf("3)Meios\n");
+    printf("0)Sair\n");
     scanf_s("%d",op);
 }
 
@@ -80,7 +96,7 @@ cliente* inserircliente(cliente* inicio, int niff, char palavra_pass[], char nom
             strcpy(novo->morada, moradaa);
             novo->saldo = 0;
             novo->seguinte = inicio;
-            printf("sucesso");
+            //printf("sucesso");
             return(novo);
         }
     }
@@ -96,7 +112,7 @@ void listarclientes(cliente* inicio)
 {
     while (inicio != NULL)
     {
-        printf("%d %s %s %.2f %s\n",inicio->nif, inicio->palavra_passe, inicio->nome,
+        printf("Nif:%d Nome:%s Saldo:%.2f Morada:%s\n",inicio->nif, inicio->nome,
             inicio->saldo, inicio->morada);
         inicio = inicio->seguinte;
     }
@@ -184,7 +200,7 @@ gestor* inserirgestor(gestor* inicio, int niff, char palavra_pass[], char nomee[
             strcpy(novo->palavra_passe_g, palavra_pass);
             strcpy(novo->nome_g, nomee);
             novo->seguinte_g = inicio;
-            printf("sucesso");
+            //printf("sucesso");
             return(novo);
         }
     }
@@ -200,7 +216,7 @@ void listargestor(gestor* inicio)
 {
     while (inicio != NULL)
     {
-        printf("%d %s %s\n", inicio->nif_g, inicio->nome_g, inicio->palavra_passe_g);
+        printf("Nif:%d Nome:%s\n", inicio->nif_g, inicio->nome_g);
         inicio = inicio->seguinte_g;
     }
 }
@@ -256,7 +272,6 @@ int prox_cod(meio* inicio, int* codd)
 {
     while (inicio != NULL)
     {
-        printf("codd: %d, codigo: %d\n", *codd, inicio->codigo);
         if ((inicio->codigo) > *codd)
         {
             *codd = inicio->codigo;
@@ -281,7 +296,7 @@ meio* inserirmeio(meio* inicio, int codd, char tipoo[], float custoo, float bate
         strcpy(novo->loc, "indisponivel");
         novo->seguinte_m = inicio;
         novo->estado = 0;
-        printf("sucesso");
+        //printf("sucesso");
         return(novo);
     }
 
@@ -317,3 +332,37 @@ meio* removermeio(meio* inicio, int cod)
 }
 
 /*fim funções meios*/
+/*funções aluguer*/
+
+
+/*fim funções ãluguer*/
+
+
+/*armazenamento e leitura*/
+
+void armazena(cliente* inicio,gestor* inicio2)
+{
+    FILE* arquivo;
+    arquivo = fopen("C:/Users/dific/OneDrive/Desktop/eda_t1/eda_t1/contas.txt", "w");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir arquivo.\n");
+        return;
+    }
+    else
+    while (inicio != NULL)
+    {
+        fprintf(arquivo,"Nif:%d;Nome:%s;Saldo:%.2f;Morada:%s;0\n", inicio->nif, inicio->nome,inicio->saldo, inicio->morada);
+        inicio = inicio->seguinte;
+    }
+    while (inicio2 != NULL)
+    {
+        fprintf(arquivo,"Nif:%d;Nome:%s;1\n", inicio2->nif_g, inicio2->nome_g);
+        inicio2 = inicio2->seguinte_g;
+    }
+}
+
+void ler_contas(cliente* inicio, gestor* inicio2)
+{
+
+}
+/*fim armazenamento e leitura*/
