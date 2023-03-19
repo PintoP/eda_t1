@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#define MAX_LINE_LENGTH 100
 
 typedef struct registo
 {
@@ -16,6 +17,9 @@ void listarmeio(meio* inicio);
 int prox_cod(meio* inicio, int* cod);
 meio* inserirmeio(meio* inicio, int cod, char tipo[], float custo, float bateria);
 meio* removermeio(meio* inicio, int cod);
+void ordenar(meio* inicio);
+void det_zona(meio* inicio);
+
 typedef struct registo2 {
 	int nif;
 	char palavra_passe[50];
@@ -45,16 +49,14 @@ void listargestor(gestor* inicio);
 
 typedef struct registo4
 {
-	int cod_a;
 	int nif_a;
 	int veiculo_cod;
-	char hora[10];
-	char data[10];
 	struct registo4* seguinte_a;
 }aluguer;
-
-
+void listaraluguer(aluguer* inicio);
+aluguer* alugar(aluguer* inicio, int nidd, int codd);
 
 /*funções a parte*/
 void estetica(char frase[]);
-void armazena(cliente* inicio,gestor* inicio2);
+void armazena(cliente* inicio,gestor* inicio2,meio* inicio3);
+void ler_contas(cliente* inicio, gestor* inicio2, meio* inicio3);

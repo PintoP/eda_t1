@@ -28,7 +28,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="contas.txt" />
     <Text Include="meios.txt" />
+    <Text Include="clientes.txt" />
+    <Text Include="gestores.txt" />
   </ItemGroup>
 </Project>

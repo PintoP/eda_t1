@@ -134,7 +134,8 @@
     <ClInclude Include="structs.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="contas.txt" />
+    <Text Include="clientes.txt" />
+    <Text Include="gestores.txt" />
     <Text Include="meios.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
