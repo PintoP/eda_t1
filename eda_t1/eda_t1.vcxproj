@@ -134,9 +134,16 @@
     <ClInclude Include="structs.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="aluguer.txt" />
     <Text Include="clientes.txt" />
     <Text Include="gestores.txt" />
     <Text Include="meios.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="aluguer.bin" />
+    <None Include="clientes.bin" />
+    <None Include="gestores.bin" />
+    <None Include="meios.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

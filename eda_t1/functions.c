@@ -360,7 +360,7 @@ void listaraluguer(aluguer* inicio)
 
 /*armazenamento e leitura*/
 
-void armazena(cliente* inicio, gestor* inicio2, meio* inicio3)
+void armazena(cliente* inicio, gestor* inicio2, meio* inicio3, aluguer* inicio4)
 {
     FILE* arquivo;
     arquivo = fopen("C:/Users/dific/OneDrive/Desktop/eda_t1/eda_t1/clientes.txt", "w");
@@ -374,7 +374,7 @@ void armazena(cliente* inicio, gestor* inicio2, meio* inicio3)
         inicio = inicio->seguinte;
     }
     fclose(arquivo);
-
+    /**/
     arquivo = fopen("C:/Users/dific/OneDrive/Desktop/eda_t1/eda_t1/gestores.txt", "w");
     if (arquivo == NULL) {
         printf("Erro ao abrir arquivo.\n");
@@ -386,7 +386,7 @@ void armazena(cliente* inicio, gestor* inicio2, meio* inicio3)
         inicio2 = inicio2->seguinte_g;
     }
     fclose(arquivo);
-
+    /**/
     FILE* arq2;
     arq2 = fopen("C:/Users/dific/OneDrive/Desktop/eda_t1/eda_t1/meios.txt", "w");
     if (arq2 == NULL) {
@@ -406,9 +406,74 @@ void armazena(cliente* inicio, gestor* inicio2, meio* inicio3)
         inicio3 = inicio3->seguinte_m;
     }
     fclose(arq2);
+    /**/
+    arq2 = fopen("C:/Users/dific/OneDrive/Desktop/eda_t1/eda_t1/aluguer.txt", "w");
+    if (arq2 == NULL) {
+        printf("Erro ao abrir arquivo.\n");
+        return;
+    }
+    while (inicio4 != NULL)
+    {
+        fprintf(arq2, "%d;%d;\n",inicio4->nif_a, inicio4->veiculo_cod);
+        inicio4 = inicio4->seguinte_a;
+    }
+    fclose(arq2);
 }
 
-/*
+void armazenabin(cliente* inicio, gestor* inicio2, meio* inicio3, aluguer* inicio4)
+{
+    FILE* arquivo;
+    arquivo = fopen("C:/Users/dific/OneDrive/Desktop/eda_t1/eda_t1/clientes.bin", "wb");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir arquivo.\n");
+        return;
+    }
+    while (inicio != NULL)
+    {
+        fwrite(inicio, sizeof(cliente), 1, arquivo);
+        inicio = inicio->seguinte;
+    }
+    fclose(arquivo);
+
+    arquivo = fopen("C:/Users/dific/OneDrive/Desktop/eda_t1/eda_t1/gestores.bin", "wb");
+    if (arquivo == NULL) {
+        printf("Erro ao abrir arquivo.\n");
+        return;
+    }
+    while (inicio2 != NULL)
+    {
+        fwrite(inicio2, sizeof(gestor), 1, arquivo);
+        inicio2 = inicio2->seguinte_g;
+    }
+    fclose(arquivo);
+
+    FILE* arq2;
+    arq2 = fopen("C:/Users/dific/OneDrive/Desktop/eda_t1/eda_t1/meios.bin", "wb");
+    if (arq2 == NULL) {
+        printf("Erro ao abrir arquivo.\n");
+        return;
+    }
+    while (inicio3 != NULL)
+    {
+        fwrite(inicio3, sizeof(meio), 1, arq2);
+        inicio3 = inicio3->seguinte_m;
+    }
+    fclose(arq2);
+
+    arq2 = fopen("C:/Users/dific/OneDrive/Desktop/eda_t1/eda_t1/aluguer.bin", "wb");
+    if (arq2 == NULL) {
+        printf("Erro ao abrir arquivo.\n");
+        return;
+    }
+    while (inicio4 != NULL)
+    {
+        fwrite(inicio4, sizeof(aluguer), 1, arq2);
+        inicio4 = inicio4->seguinte_a;
+    }
+    fclose(arq2);
+}
+
+
 void ler_contas(cliente* inicio, gestor* inicio2, meio* inicio3)
 {
     FILE* arquivo;
@@ -418,24 +483,24 @@ void ler_contas(cliente* inicio, gestor* inicio2, meio* inicio3)
         printf("Erro ao abrir o arquivo\n");
         exit(1);
     }
-
+    int campo1;
+    float campo4;
+    char campo2[50], campo3[50], campo5[50];
     while (fgets(line, 100, arquivo) != NULL) {
-        int campo1;
-        float campo4;
-        char campo2[50], campo3[50], campo5[50];
-        // Dividir a linha em campos usando o delimitador ";"
+        
+
         int num_campos_lidos = sscanf(line, "%d;%[^;];%[^;];%f;%s", &campo1, campo2, campo3, &campo4, campo5);
         if (num_campos_lidos != 5) {
             printf("Erro na linha: %s", line);
         
         }
-        inicio = inserircliente(inicio, campo1, campo2, campo3, campo5,campo4);
-        printf("Cliente inserido\n");
+            inicio = inserircliente(inicio, campo1, campo2, campo3, campo5);
+            deposito(inicio,campo1,campo4);
     }
     fclose(arquivo);
 
 }
-*/
+
 
 
 
@@ -492,7 +557,7 @@ void det_zona(meio* inicio)
 
     while (inicio != NULL)
     {
-        if (inicio->loc) {
+        if (strcmp(inicio->loc, zona)==0) {
             printf("%d %s %.2f %.2f %s ", inicio->codigo, inicio->tipo, inicio->custo, inicio->bateria, inicio->loc);
             if (inicio->estado == 0)
             {

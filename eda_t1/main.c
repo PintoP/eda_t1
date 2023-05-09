@@ -13,6 +13,7 @@ int main()
     gestor* gestores = NULL;
     gestores = inserirgestor(gestores, 1, "1", "1");
     cliente* clientes = NULL;
+    clientes = inserircliente(clientes,0,"0","0","0");
     meio* meios = NULL;
     meios = inserirmeio(meios,1, "mota", 1, 12);
     meios = inserirmeio(meios,2, "motaaa", 1, 122);
@@ -23,9 +24,8 @@ int main()
     char tipo[50],zona[15];
     float custo = 0, auton = 0;
     int cod=0;
-   // ler_contas(clientes, gestores, meios);
     int op1=0,opc=0,opc2=0,opc3=0;
-
+    ler_contas(clientes, gestores, meios); 
     do
     {
         menu_inicial(&op1);
@@ -71,7 +71,8 @@ int main()
                     {
                     case 1://armazenar dados************************************
                     
-                            armazena(clientes, gestores, meios);
+                            armazena(clientes, gestores, meios,alugueres);
+                            armazenabin(clientes, gestores, meios,alugueres);
                       
                         break;
                     case 2://mostrar dados**************************************

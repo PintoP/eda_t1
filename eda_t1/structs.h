@@ -58,5 +58,6 @@ aluguer* alugar(aluguer* inicio, int nidd, int codd);
 
 /*funções a parte*/
 void estetica(char frase[]);
-void armazena(cliente* inicio,gestor* inicio2,meio* inicio3);
+void armazena(cliente* inicio,gestor* inicio2,meio* inicio3,aluguer* inicio4);
+void armazenabin(cliente* inicio,gestor* inicio2,meio* inicio3,aluguer* inicio4);
 void ler_contas(cliente* inicio, gestor* inicio2, meio* inicio3);
