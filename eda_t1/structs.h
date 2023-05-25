@@ -34,6 +34,7 @@ void listarclientes(cliente* inicio);
 int existecliente(cliente* inicio, int nif);
 int c_confirmaconta(cliente* inicio, int nif,char palavra_passe[]);
 cliente* removercliente(cliente* inicio, int nif);
+void obter_dados(cliente* inicio, int niff, float g_saldo, char g_nome[]);
 
 void deposito(cliente* inicio, int nif, float n);
 typedef struct registo3
@@ -61,3 +62,18 @@ void estetica(char frase[]);
 void armazena(cliente* inicio,gestor* inicio2,meio* inicio3,aluguer* inicio4);
 void armazenabin(cliente* inicio,gestor* inicio2,meio* inicio3,aluguer* inicio4);
 void ler_contas(cliente* inicio, gestor* inicio2, meio* inicio3);
+
+
+
+
+
+
+
+/*abp*/
+typedef struct registo5
+{
+	int numero;
+	char nome[50];
+	struct registo5* esquerda;
+	struct registo5* direita;
+}ABP;

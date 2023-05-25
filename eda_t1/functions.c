@@ -42,8 +42,10 @@ void menu_gestor(int* op)
     scanf_s("%d", op);
 }
 
-void menu_cliente(int* op)
+void menu_cliente(int* op, cliente* inicio, int niff, float g_saldo, char g_nome[])
 {
+    void obter_dados(inicio, niff, g_saldo, g_nome);
+    printf("Nome:%s   Saldo:%f \n",g_nome,g_saldo);
     printf("1)Alugar \n");
     printf("2)Depositar saldo \n");
     printf("3)Listar por autonomia (decrescente) \n");
@@ -73,7 +75,6 @@ int existecliente(cliente* inicio, int niff)
     }
     return(0);
 }
-
 int c_confirmaconta(cliente* inicio, int niff, char pass[])
 {
     while (inicio != NULL)
@@ -127,6 +128,21 @@ void deposito(cliente* inicio,int niff, float d)
         if (inicio->nif == niff)
         {
             inicio->saldo += d;
+            return(1);
+        }
+        inicio = inicio->seguinte;
+    }
+    return(0);
+}
+
+void obter_dados(cliente* inicio, int niff,float g_saldo,char g_nome[])
+{
+    while (inicio != NULL)
+    {
+        if (inicio->nif == niff)
+        {
+            g_saldo = inicio->saldo;
+            g_nome = inicio->nome;
             return(1);
         }
         inicio = inicio->seguinte;
@@ -331,17 +347,28 @@ meio* removermeio(meio* inicio, int cod)
 /*fim funções meios*/
 /*funções aluguer*/
 
-aluguer* alugar(aluguer* inicio, int niff,int veic)
+aluguer* alugar(aluguer* inicio,cliente* inicio2, int niff,int veic)
 {
-    aluguer* novo = malloc(sizeof(struct registo));
-    if (novo != NULL)
+    double saldo = 0, veic_custo=0;
+
+    if (saldo-veic_custo>=0)
     {
-        novo->nif_a = niff;
-        novo->veiculo_cod = veic;
-        novo->seguinte_a = inicio;
-        //printf("sucesso");
-        return(novo);
+        aluguer* novo = malloc(sizeof(struct registo));
+        if (novo != NULL)
+        {
+            novo->nif_a = niff;
+            novo->veiculo_cod = veic;
+            novo->seguinte_a = inicio;
+            //printf("sucesso");
+            return(novo);
+        }
     }
+
+    //verificar se o veic esta ocupado
+    //se tem saldo sufeciente para alugar
+    //registar aluguer
+    //subtrarir o custo no saldo
+    //por o veiculo ocupado
 
     return inicio;
 }
@@ -569,5 +596,104 @@ void det_zona(meio* inicio)
         }
         inicio = inicio->seguinte_m;
     }
+
+}
+
+
+
+/*********** ABP funções *************/
+
+ABP* inserir(ABP* abp, int numero, char nome[])
+{
+    ABP* aux = abp, ** aux2;
+    ABP* novo = malloc(sizeof(ABP));
+    if (novo != NULL)
+    {
+        novo->numero = numero;
+        strcpy(novo->nome,nome);
+        novo->esquerda = NULL;
+        novo->direita = NULL;
+        return(novo);
+    }
+    else
+    {
+        while (aux != NULL)
+        {
+            if (aux->numero <= numero)
+            {
+                aux = aux->direita;
+                aux2 = &(aux->direita);
+            }
+            else
+            {
+                aux = aux->esquerda;
+                aux2 = &(aux->esquerda);
+            }
+        }
+        
+        ABP* novo = malloc(sizeof(ABP));
+        if (novo != NULL)
+        {
+            novo->numero = numero;
+            strcpy(novo->nome, nome);
+            novo->esquerda = NULL;
+            novo->direita = NULL;
+            *aux2 = novo;
+            return(abp);
+
+        }
+        else return(abp);
+    }
+}
+
+ABP* inserirrec(ABP* abp, int numero, char nome[])
+{
+    if (abp == NULL)
+    {
+        ABP* novo = malloc(sizeof(ABP));
+        if (novo != NULL)
+        {
+            novo->numero = numero;
+            strcpy(novo->nome, nome);
+            novo->esquerda = NULL;
+            novo->direita = NULL;
+            return(novo);
+        }
+        else { return (abp); }
+    }
+    else if (numero >= abp->numero) abp->esquerda = inserirrec(abp->esquerda, numero, nome);
+    else abp->direita = inserirrec(abp->direita,numero,nome);
+    return(abp);
+}
+
+
+
+ABP* cunsultar(ABP* abp, int numero)
+{
+    while (abp != NULL)
+    {
+        if (abp->numero == numero) return(abp);
+        else if (abp->numero > numero) return(abp);
+        else abp= abp->direita;
+    }
+    retrurn(NULL);
+}
+
+ABP* consultarrec(ABP* abp, int numero)
+{
+    if (abp == NULL) return(NULL);
+    else if (abp->numero == numero) return(abp);
+    else if (abp->numero > numero) return(consultarrec(abp->esquerda, numero));
+    else return(consultarrec(abp->direita, numero));
+}
+
+int quantidade(ABP* abp)
+{
+    if (abp == NULL) return (0);
+    return(1 + quantidade(abp->esquerda) + quantidade(abp->direita));
+}
+
+ABP* veiculos_raio(ABP* abp, int numero)
+{
 
 }
