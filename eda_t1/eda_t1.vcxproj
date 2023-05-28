@@ -134,12 +134,15 @@
     <ClInclude Include="structs.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="abp.txt" />
     <Text Include="aluguer.txt" />
+    <Text Include="arestas.txt" />
     <Text Include="clientes.txt" />
     <Text Include="gestores.txt" />
     <Text Include="meios.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="abp.bin" />
     <None Include="aluguer.bin" />
     <None Include="clientes.bin" />
     <None Include="gestores.bin" />

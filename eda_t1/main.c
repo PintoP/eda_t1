@@ -3,6 +3,8 @@
 #include <string.h>
 #include <time.h>
 #include <Windows.h>
+#include <float.h>
+#include <stdbool.h>
 #include "structs.h"
 
 #define MAX_LINE_LENGTH 100
@@ -15,8 +17,6 @@ int main()
     cliente* clientes = NULL;
     clientes = inserircliente(clientes,0,"0","0","0");
     meio* meios = NULL;
-    meios = inserirmeio(meios,1, "mota", 1, 12);
-    meios = inserirmeio(meios,2, "motaaa", 1, 122);
     char nome_c[50], pass_c[50], morada_c[50];
     int nif_c = 0,veiculo_esc=0;
     float dep_c = 0;
@@ -25,6 +25,24 @@ int main()
     float custo = 0, auton = 0;
     int cod=0;
     int op1=0,opc=0,opc2=0,opc3=0;
+    int kms = 0, l = 0, codveic=0;
+    char nloc[50];
+    ABP* arvore = criarGrafo();
+    aresta* listaArestas = criarConexao();
+    associarArestas(arvore, listaArestas);
+
+    meios = inserirmeio(meios, 1, "mota", 123, 12);
+    meios = inserirmeio(meios, 2, "trotinette", 54, 122);
+    meios = inserirmeio(meios, 3, "bicicleta", 89, 122);
+    meios = inserirmeio(meios, 4, "trotinete", 12, 122);
+    meios = inserirmeio(meios, 5, "mota", 112, 122);
+    /*
+    atualizarLocalizacao(arvore,meios,100,1,"///latir.grandão.senha");
+    atualizarLocalizacao(arvore,meios,100,2,"///manga.pregar.chama");
+    atualizarLocalizacao(arvore,meios,100,3,"///latir.grandão.senha");
+    atualizarLocalizacao(arvore,meios,100,4,"///capim.vime.urubu");
+    atualizarLocalizacao(arvore,meios,100,5,"///falho.puxa.refrigerando");
+    */
     ler_contas(clientes, gestores, meios); 
     do
     {
@@ -60,7 +78,12 @@ int main()
                 case 4://veiculos em uma zona
                     det_zona(meios);
                     break;
+                case 5:
+                    scanf_s("%d",&l);
+                    scanf_s("%d",&kms );
+                    encontrarVerticesAlcancaveis(arvore, l, kms);
                 }
+
             }
             else if (g_confirmaconta(gestores, nif_c, pass_c))
             {
@@ -231,7 +254,13 @@ int main()
                         default:
                             break;
                         }
-                        break;
+                    case 6:
+                        printf("Insira o GeoCode:");
+                        scanf_s("%d",&codveic);
+                        printf("Insira o codigo do veiculo:");
+                        scanf("%s",nloc);
+                        atualizarLocalizacao(arvore, meios,100,codveic,nloc);
+                    
                     default://**************************************************
                         break;
                     }

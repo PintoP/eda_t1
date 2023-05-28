@@ -4,6 +4,8 @@
 #include <string.h>
 #include <time.h>
 #include "structs.h"
+#include <float.h>
+#include <stdbool.h>
 
 #define MAX_LINE_LENGTH 100
 
@@ -38,6 +40,7 @@ void menu_gestor(int* op)
     printf("3)Inserir dados \n");
     printf("4)Alterar dados \n");
     printf("5)Remover dados \n");
+    printf("6)Atualizar localização do veiculo \n");
     printf("0)Sair\n");
     scanf_s("%d", op);
 }
@@ -598,102 +601,291 @@ void det_zona(meio* inicio)
     }
 
 }
+void atualizarLocalizacao(ABP* grafo, meio* veiculos, int numVeiculos, int codigoVeiculo, char novaLoc[]) {
+    // Encontra o veículo com o código fornecido
+    meio* veiculo = NULL;
+    for (int i = 0; i < numVeiculos; i++) {
+        if (veiculos[i].codigo == codigoVeiculo) {
+            veiculo = &veiculos[i];
+            break;
+        }
+    }
+
+    if (veiculo == NULL) {
+        printf("Veículo não encontrado.\n");
+        return;
+    }
+
+    // Procura o vértice com a novaLoc no grafo
+    vertice* vertice_atual = grafo->vertices;
+    while (vertice_atual != NULL) {
+        if (strcmp(vertice_atual->nome, novaLoc) == 0) {
+            // Atualiza a localização do veículo e o local_meio relacionado
+            strcpy(veiculo->loc_abp, novaLoc);  // Atualiza a loc_abp do veículo para novaLoc
+            strcpy(veiculo->loc, vertice_atual->local_meio);  // Atualiza a loc do veículo para o local_meio do vértice encontrado
+            printf("Localização atualizada com sucesso.\n");
+            return;
+        }
+        vertice_atual = vertice_atual->seguinte;
+    }
+
+    printf("Localização não encontrada no grafo.\n");
+}
+
 
 
 
 /*********** ABP funções *************/
+ABP* criarGrafo() {
+    ABP* g = (ABP*)malloc(sizeof(ABP));
+    g->num_vertices = 8;
+    g->num_arestas = 0;
+    g->vertices = NULL;
 
-ABP* inserir(ABP* abp, int numero, char nome[])
-{
-    ABP* aux = abp, ** aux2;
-    ABP* novo = malloc(sizeof(ABP));
-    if (novo != NULL)
-    {
-        novo->numero = numero;
-        strcpy(novo->nome,nome);
-        novo->esquerda = NULL;
-        novo->direita = NULL;
-        return(novo);
-    }
-    else
-    {
-        while (aux != NULL)
-        {
-            if (aux->numero <= numero)
-            {
-                aux = aux->direita;
-                aux2 = &(aux->direita);
+    char nomes[8][50] = {
+        "///latir.grandão.senha",
+        "///manga.pregar.chama",
+        "///joia.bombom.abalar",
+        "///alho.ervas.touro",
+        "///capim.vime.urubu",
+        "///deseja.volto.chia",
+        "///gavetão.tingido.mundão",
+        "///falho.puxa.refrigerando"
+    };
+
+    char local_meios[8][50] = {
+      "Igreja Nosso Senhor dos Navegantes",
+      "Mc Donald´s",
+      "Escola José Regio",
+      "Parque de Jogos",
+      "Praça Jose Regio",
+      "Forte São João",
+      "BIblioteca Municipal",
+      "Parque da Cidade"
+    };
+
+    for (int i = 0; i < g->num_vertices; i++) {
+        vertice* novoVertice = (vertice*)malloc(sizeof(vertice));
+        novoVertice->id = i;
+        strcpy(novoVertice->nome, nomes[i]);
+        strcpy(novoVertice->local_meio, local_meios[i]);
+        novoVertice->arestas = NULL;
+        novoVertice->seguinte = NULL;
+
+        if (g->vertices == NULL) {
+            g->vertices = novoVertice;
+        }
+        else {
+            vertice* atual = g->vertices;
+            while (atual->seguinte != NULL) {
+                atual = atual->seguinte;
             }
-            else
-            {
-                aux = aux->esquerda;
-                aux2 = &(aux->esquerda);
+            atual->seguinte = novoVertice;
+        }
+    }
+
+    return g;
+}
+/*************************************************************************************************************************/
+aresta* criarConexao() {
+    aresta* listaArestas = NULL;
+    int conexoes[12][3] = {
+        {0, 1, 9},
+        {0, 2, 7},
+        {1, 2, 12},
+        {1, 4, 6},
+        {2, 3, 8},
+        {2, 6, 15},
+        {3, 4, 19},
+        {3, 5, 10},
+        {4, 5, 7},
+        {4, 7, 11},
+        {5, 6, 16},
+        {6, 7, 13}
+    };
+    for (int i = 0; i < 12; i++) {
+        int id_origem = conexoes[i][0];
+        int id_destino = conexoes[i][1];
+        int kms = conexoes[i][2];
+
+        aresta* novaAresta = (aresta*)malloc(sizeof(aresta));
+        novaAresta->id_origem = id_origem;
+        novaAresta->id_destino = id_destino;
+        novaAresta->km = kms;
+        novaAresta->proxima = NULL;
+
+        // Adiciona a nova aresta à lista de arestas
+        if (listaArestas == NULL) {
+            listaArestas = novaAresta;
+        }
+        else {
+            aresta* atual = listaArestas;
+            while (atual->proxima != NULL) {
+                atual = atual->proxima;
             }
+            atual->proxima = novaAresta;
         }
-        
-        ABP* novo = malloc(sizeof(ABP));
-        if (novo != NULL)
-        {
-            novo->numero = numero;
-            strcpy(novo->nome, nome);
-            novo->esquerda = NULL;
-            novo->direita = NULL;
-            *aux2 = novo;
-            return(abp);
+    }
 
+    return listaArestas;
+}
+/******************************************************************************************************/
+void associarArestas(ABP* grafo, aresta* listaArestas) {
+    vertice* verticeAtual = grafo->vertices;
+
+    // Percorre cada vértice do grafo
+    while (verticeAtual != NULL) {
+        aresta* arestaAtual = listaArestas;
+
+        // Percorre a lista de arestas
+        while (arestaAtual != NULL) {
+            // Verifica se a aresta tem origem no vértice atual
+            if (arestaAtual->id_origem == verticeAtual->id) {
+                // Cria uma nova aresta e associa ao vértice atual
+                aresta* novaAresta = (aresta*)malloc(sizeof(aresta));
+                novaAresta->id_origem = arestaAtual->id_origem;
+                novaAresta->id_destino = arestaAtual->id_destino;
+                novaAresta->km = arestaAtual->km;
+                novaAresta->proxima = verticeAtual->arestas;
+                verticeAtual->arestas = novaAresta;
+            }
+
+            arestaAtual = arestaAtual->proxima;
         }
-        else return(abp);
+
+        verticeAtual = verticeAtual->seguinte;
     }
 }
-
-ABP* inserirrec(ABP* abp, int numero, char nome[])
-{
-    if (abp == NULL)
-    {
-        ABP* novo = malloc(sizeof(ABP));
-        if (novo != NULL)
-        {
-            novo->numero = numero;
-            strcpy(novo->nome, nome);
-            novo->esquerda = NULL;
-            novo->direita = NULL;
-            return(novo);
+/******************************************************/
+void encontrarLocalMeios(ABP* grafo, char* nome) {
+    // Procura o nome fornecido no grafo
+    vertice* vertice_atual = grafo->vertices;
+    while (vertice_atual != NULL) {
+        if (strcmp(vertice_atual->nome, nome) == 0) {
+            printf("%s\n", vertice_atual->local_meio);
+            return;
         }
-        else { return (abp); }
+        vertice_atual = vertice_atual->seguinte;
     }
-    else if (numero >= abp->numero) abp->esquerda = inserirrec(abp->esquerda, numero, nome);
-    else abp->direita = inserirrec(abp->direita,numero,nome);
-    return(abp);
+
+    // Se o nome não for encontrado, exibe uma mensagem de erro
+    printf("Nome \"%s\" não encontrado no grafo.\n", nome);
 }
 
+/*******************************************************/
+void imprimir_info_veiculo(const char* localizacao, meio* veiculos, int num_veiculos) {
+    int i;
 
-
-ABP* cunsultar(ABP* abp, int numero)
-{
-    while (abp != NULL)
-    {
-        if (abp->numero == numero) return(abp);
-        else if (abp->numero > numero) return(abp);
-        else abp= abp->direita;
+    for (i = 0; i < num_veiculos; i++) {
+        if (strcmp(localizacao, veiculos[i].loc_abp) == 0) {
+            printf("Informações do veículo:\n");
+            printf("Código: %d\n", veiculos[i].codigo);
+            printf("Tipo: %s\n", veiculos[i].tipo);
+            printf("Bateria: %.2f\n", veiculos[i].bateria);
+            printf("Custo: %.2f\n", veiculos[i].custo);
+            printf("Localização: %s\n", veiculos[i].loc);
+            printf("Localização ABP: %s\n", veiculos[i].loc_abp);
+            printf("Estado: %s\n", veiculos[i].estado ? "Ocupado" : "Disponível");
+            return; // Encontrou o veículo correspondente, encerra a função
+        }
     }
-    retrurn(NULL);
+
+    // Se chegou aqui, significa que não encontrou um veículo com a localização desejada
+    printf("Nenhum veículo encontrado para a localização %s.\n", localizacao);
+}
+/**********************************************************/
+void encontrarVerticesAlcancaveis(ABP* grafo, int id_vertice, int kms_maximos,meio* meioos) {
+    vertice* vertice_origem = NULL;
+
+    // Encontra o vértice de origem com o ID fornecido
+    vertice* vertice_atual = grafo->vertices;
+    while (vertice_atual != NULL) {
+        if (vertice_atual->id == id_vertice) {
+            vertice_origem = vertice_atual;
+            break;
+        }
+        vertice_atual = vertice_atual->seguinte;
+    }
+
+    // Verifica se o vértice de origem foi encontrado
+    if (vertice_origem == NULL) {
+        printf("Vértice de origem não encontrado.\n");
+        return;
+    }
+
+    printf("Vértices alcançáveis a partir do vértice %s sem ultrapassar %d km:\n", vertice_origem->nome, kms_maximos);
+
+    // Inicializa uma lista para armazenar os vértices alcançáveis
+    int* visitado = (int*)calloc(grafo->num_vertices, sizeof(int));
+    int* vertices_alcancaveis = (int*)malloc(grafo->num_vertices * sizeof(int));
+    int contador_alcancaveis = 0;
+
+    // Inicializa uma pilha para percorrer o grafo em profundidade
+    int* pilha = (int*)malloc(grafo->num_vertices * sizeof(int));
+    int* kms_acumulados = (int*)malloc(grafo->num_vertices * sizeof(int));
+    int topo = 0;
+
+    // Marca o vértice de origem como visitado e o adiciona à pilha
+    visitado[id_vertice] = 1;
+    pilha[topo] = id_vertice;
+    kms_acumulados[topo] = 0;
+    topo++;
+
+    // Percorre o grafo em profundidade
+    while (topo > 0) {
+        int id_atual = pilha[--topo];
+        int kms_atual = kms_acumulados[topo];
+        vertice_atual = grafo->vertices;
+
+        // Encontra o vértice correspondente ao ID atual
+        while (vertice_atual != NULL && vertice_atual->id != id_atual) {
+            vertice_atual = vertice_atual->seguinte;
+        }
+
+        // Verifica as arestas do vértice atual
+        aresta* aresta_atual = vertice_atual->arestas;
+        while (aresta_atual != NULL) {
+            int id_destino = aresta_atual->id_destino;
+            int km_aresta = aresta_atual->km;
+
+            int km_total = kms_atual + km_aresta;
+
+            // Verifica se o vértice de destino já foi visitado e se a distância é menor ou igual ao limite de quilômetros
+            if (!visitado[id_destino] && km_total <= kms_maximos) {
+                visitado[id_destino] = 1;
+                pilha[topo] = id_destino;
+                kms_acumulados[topo] = km_total;
+                topo++;
+                vertices_alcancaveis[contador_alcancaveis++] = id_destino;
+            }
+
+            aresta_atual = aresta_atual->proxima;
+        }
+    }
+
+    // Imprime o vértice de origem
+    encontrarLocalMeios(grafo, vertice_origem->nome);
+
+    // Imprime os vértices alcançáveis
+    for (int i = 0; i < contador_alcancaveis; i++) {
+        int id_vertice = vertices_alcancaveis[i];
+        vertice_atual = grafo->vertices;
+
+        // Encontra o vértice correspondente ao ID atual
+        while (vertice_atual != NULL && vertice_atual->id != id_vertice) {
+            vertice_atual = vertice_atual->seguinte;
+        }
+
+        if (vertice_atual != NULL) {
+            encontrarLocalMeios(grafo, vertice_atual->nome);
+            imprimir_info_veiculo(vertice_atual->nome, meioos, 100);
+        }
+    }
+
+    // Libera a memória alocada
+    free(visitado);
+    free(vertices_alcancaveis);
+    free(pilha);
+    free(kms_acumulados);
 }
 
-ABP* consultarrec(ABP* abp, int numero)
-{
-    if (abp == NULL) return(NULL);
-    else if (abp->numero == numero) return(abp);
-    else if (abp->numero > numero) return(consultarrec(abp->esquerda, numero));
-    else return(consultarrec(abp->direita, numero));
-}
-
-int quantidade(ABP* abp)
-{
-    if (abp == NULL) return (0);
-    return(1 + quantidade(abp->esquerda) + quantidade(abp->direita));
-}
-
-ABP* veiculos_raio(ABP* abp, int numero)
-{
-
-}

@@ -9,6 +9,7 @@ typedef struct registo
 	float bateria;
 	float custo;
 	char loc[50];
+	char loc_abp[50];
 	int estado;//1-opcupado      0-disponivel
 
 	struct registo* seguinte_m;
@@ -19,6 +20,7 @@ meio* inserirmeio(meio* inicio, int cod, char tipo[], float custo, float bateria
 meio* removermeio(meio* inicio, int cod);
 void ordenar(meio* inicio);
 void det_zona(meio* inicio);
+
 
 typedef struct registo2 {
 	int nif;
@@ -70,10 +72,30 @@ void ler_contas(cliente* inicio, gestor* inicio2, meio* inicio3);
 
 
 /*abp*/
-typedef struct registo5
-{
-	int numero;
+typedef struct registo6 {
+	int id_origem;      // id do vértice de origem
+	int id_destino;     // id do vértice de destino
+	int km;
+	struct aresta* proxima;
+} aresta;
+
+typedef struct registo7 {
+	int id;
 	char nome[50];
-	struct registo5* esquerda;
-	struct registo5* direita;
-}ABP;
+	char local_meio[50];
+	meio* meios;
+	aresta* arestas;
+	struct vertice* seguinte;
+} vertice;
+
+typedef struct registo5 {
+	int num_vertices;
+	int num_arestas;
+	vertice* vertices;
+} ABP;
+
+ABP* criarGrafo();
+aresta* criarConexao();
+void associarArestas(ABP* grafo, aresta* listaArestas);
+void encontrarVerticesAlcancaveis(ABP* grafo, int id_vertice, int kms_maximos);
+void atualizarLocalizacao(ABP* grafo, meio* veiculos, int numVeiculos, int codigoVeiculo, char novaLoc[]);
