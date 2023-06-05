@@ -27,4 +27,29 @@
       <Filter>Arquivos de Origem</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="meios.txt" />
+    <Text Include="clientes.txt" />
+    <Text Include="gestores.txt" />
+    <Text Include="aluguer.txt" />
+    <Text Include="abp.txt" />
+    <Text Include="arestas.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="aluguer.bin">
+      <Filter>Arquivos de Recurso</Filter>
+    </None>
+    <None Include="clientes.bin">
+      <Filter>Arquivos de Recurso</Filter>
+    </None>
+    <None Include="gestores.bin">
+      <Filter>Arquivos de Recurso</Filter>
+    </None>
+    <None Include="meios.bin">
+      <Filter>Arquivos de Recurso</Filter>
+    </None>
+    <None Include="abp.bin">
+      <Filter>Arquivos de Recurso</Filter>
+    </None>
+  </ItemGroup>
 </Project>
