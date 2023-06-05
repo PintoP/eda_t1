@@ -24,7 +24,7 @@ int main()
     char tipo[50],zona[15];
     float custo = 0, auton = 0;
     int cod=0;
-    int op1=0,opc=0,opc2=0,opc3=0;
+    int op1=0,opc=0,opc2=0,opc3=0,opc4=0;
     int kms = 0, l = 0, codveic=0;
     char nloc[50];
     ABP* arvore = criarGrafo();
@@ -32,17 +32,17 @@ int main()
     associarArestas(arvore, listaArestas);
 
     meios = inserirmeio(meios, 1, "mota", 123, 12);
-    meios = inserirmeio(meios, 2, "trotinette", 54, 122);
-    meios = inserirmeio(meios, 3, "bicicleta", 89, 122);
-    meios = inserirmeio(meios, 4, "trotinete", 12, 122);
-    meios = inserirmeio(meios, 5, "mota", 112, 122);
-    /*
-    atualizarLocalizacao(arvore,meios,100,1,"///latir.grandão.senha");
-    atualizarLocalizacao(arvore,meios,100,2,"///manga.pregar.chama");
-    atualizarLocalizacao(arvore,meios,100,3,"///latir.grandão.senha");
-    atualizarLocalizacao(arvore,meios,100,4,"///capim.vime.urubu");
-    atualizarLocalizacao(arvore,meios,100,5,"///falho.puxa.refrigerando");
-    */
+    meios = inserirmeio(meios, 2, "trotinette", 54, 65);
+    meios = inserirmeio(meios, 3, "bicicleta", 89, 34);
+    meios = inserirmeio(meios, 4, "trotinete2", 12, 50);
+    meios = inserirmeio(meios, 5, "mota2", 112, 99);
+    
+    atualizarLocalizacao(meios,100,2,"///latir.grandao.senha");
+    atualizarLocalizacao(meios,100,3,"///manga.pregar.chama");
+    atualizarLocalizacao(meios,100,4,"///joia.bombom.abalar");
+    atualizarLocalizacao(meios,100,5,"///capim.vime.urubu");
+    atualizarLocalizacao(meios,100,6,"///manga.pregar.chama");
+    
     ler_contas(clientes, gestores, meios); 
     do
     {
@@ -81,7 +81,7 @@ int main()
                 case 5:
                     scanf_s("%d",&l);
                     scanf_s("%d",&kms );
-                    encontrarVerticesAlcancaveis(arvore, l, kms);
+                    encontrarVerticesAlcancaveis(arvore, l, kms,meios);
                 }
 
             }
@@ -261,6 +261,36 @@ int main()
                         scanf("%s",nloc);
                         atualizarLocalizacao(arvore, meios,100,codveic,nloc);
                     
+
+                    case 7:
+                        menu_grafo(&opc4);
+                        switch (opc4)
+                        {
+                            case 1:
+                                criarVertice(arvore);
+                                break;
+                            case 2:
+                                editarVertice(arvore);
+                                break;
+                            case 3:
+                                removerVertice(arvore);
+                                break;
+                            case 4:
+                                imprimirVertices(arvore);
+                                break;
+                            case 5:
+                                criarAresta(arvore);
+                                break;
+                            case 6:
+                                removerAresta(listaArestas);
+                                break;
+                            case 7:
+                                imprimirAresta(listaArestas);
+                                break;
+                            case 8:
+                                atualizarAresta(listaArestas);
+                                break;
+                        }
                     default://**************************************************
                         break;
                     }

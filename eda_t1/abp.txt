@@ -1,0 +1,9 @@
+0 Igreja_Nosso_Senhor_dos_Navegantes ///latir.grandao.senha
+1 Mc_Donalds ///manga.pregar.chama
+2 Escola_Jose_Regio ///joia.bombom.abalar
+3 Parque_de_Jogos ///alho.ervas.touro
+4 Praca_Jose_Regio ///capim.vime.urubu
+5 Forte_Sao_Joao ///deseja.volto.chia
+6 BIblioteca_Municipal ///gavetão.tingido.mundão
+7 Parque_da_Cidade ///falho.puxa.refrigerando
+8 vila_do_conde ///ado.ado.ado

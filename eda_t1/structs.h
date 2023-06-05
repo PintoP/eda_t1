@@ -97,5 +97,19 @@ typedef struct registo5 {
 ABP* criarGrafo();
 aresta* criarConexao();
 void associarArestas(ABP* grafo, aresta* listaArestas);
-void encontrarVerticesAlcancaveis(ABP* grafo, int id_vertice, int kms_maximos);
-void atualizarLocalizacao(ABP* grafo, meio* veiculos, int numVeiculos, int codigoVeiculo, char novaLoc[]);
+void encontrarVerticesAlcancaveis(ABP* grafo, int id_vertice, int kms_maximos, meio* meioos);
+void atualizarLocalizacao(meio* veiculos, int numVeiculos, int idVeiculo, const char* localizacao);
+void menu_grafo(int* op);
+void imprimir_info_veiculo(const char* localizacao, const meio* veiculos);
+
+ABP* carregarGrafo();
+aresta* carregarAresta();
+void buscarvertice(ABP* g,int id);
+void criarVertice(ABP* g);
+void editarVertice(ABP* g);
+void removerVertice(ABP* g);
+void imprimirVertices(ABP* g);
+void criarAresta(ABP* g);
+void removerAresta(aresta* a);
+void imprimirAresta(aresta* a);
+void atualizarAresta(aresta* a);
